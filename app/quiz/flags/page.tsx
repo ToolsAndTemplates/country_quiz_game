@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import Link from 'next/link'
 import QuizContainer from '@/components/QuizContainer'
 import { QuizQuestion } from '@/types/country'
 import { generateFlagQuestions } from '@/lib/countries'
@@ -10,12 +11,23 @@ import { generateFlagQuestions } from '@/lib/countries'
 export default function FlagsQuiz() {
   const [questions, setQuestions] = useState<QuizQuestion[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     async function loadQuestions() {
-      const generatedQuestions = await generateFlagQuestions(10)
-      setQuestions(generatedQuestions)
-      setLoading(false)
+      try {
+        const generatedQuestions = await generateFlagQuestions(10)
+        if (generatedQuestions.length === 0) {
+          setError(true)
+        } else {
+          setQuestions(generatedQuestions)
+        }
+      } catch (err) {
+        console.error('Error loading questions:', err)
+        setError(true)
+      } finally {
+        setLoading(false)
+      }
     }
     loadQuestions()
   }, [])
@@ -29,6 +41,33 @@ export default function FlagsQuiz() {
           className="text-6xl"
         >
           🌍
+        </motion.div>
+      </div>
+    )
+  }
+
+  if (error || questions.length === 0) {
+    return (
+      <div className="min-h-screen gradient-bg flex items-center justify-center p-4">
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="glass rounded-3xl p-8 max-w-md text-center"
+        >
+          <div className="text-6xl mb-4">😕</div>
+          <h2 className="text-2xl font-bold text-white mb-4">Oops! Something went wrong</h2>
+          <p className="text-white/80 mb-6">
+            We couldn&apos;t load the quiz questions. Please check your internet connection and try again.
+          </p>
+          <Link href="/">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-8 py-4 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold"
+            >
+              Back to Home
+            </motion.button>
+          </Link>
         </motion.div>
       </div>
     )

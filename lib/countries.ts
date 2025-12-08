@@ -1,6 +1,6 @@
 import { Country, QuizQuestion } from '@/types/country'
 
-const COUNTRIES_API = 'https://restcountries.com/v3.1/all'
+const COUNTRIES_API = '/api/countries'
 
 let cachedCountries: Country[] | null = null
 
@@ -11,7 +11,18 @@ export async function fetchCountries(): Promise<Country[]> {
 
   try {
     const response = await fetch(COUNTRIES_API)
+
+    if (!response.ok) {
+      throw new Error(`API returned ${response.status}`)
+    }
+
     const data = await response.json()
+
+    // Ensure data is an array
+    if (!Array.isArray(data)) {
+      console.error('API did not return an array:', data)
+      return []
+    }
 
     // Filter out countries without essential data
     cachedCountries = data.filter((country: Country) =>
