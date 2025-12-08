@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import QuizContainer from '@/components/QuizContainer'
 import { QuizQuestion } from '@/types/country'
-import { generatePopulationQuestions, formatPopulation } from '@/lib/countries'
+import { generatePopulationQuestions } from '@/lib/countries'
 
 export default function PopulationQuiz() {
   const [questions, setQuestions] = useState<QuizQuestion[]>([])
@@ -102,14 +102,8 @@ export default function PopulationQuiz() {
                 <div className="text-5xl mb-4">
                   {idx === 0 ? '🌍' : '🌎'}
                 </div>
-                <div className="text-3xl font-bold text-white mb-4">
+                <div className="text-3xl font-bold text-white">
                   {country.name.common}
-                </div>
-                <div className="inline-block px-6 py-3 bg-white/10 rounded-full">
-                  <div className="text-sm text-white/70 mb-1">Population</div>
-                  <div className="text-2xl font-bold text-white">
-                    {formatPopulation(country.population)}
-                  </div>
                 </div>
               </motion.button>
             ))}
