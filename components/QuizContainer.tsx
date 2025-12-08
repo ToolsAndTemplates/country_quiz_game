@@ -1,15 +1,17 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { QuizQuestion } from '@/types/country'
+import { updateGameStats, ACHIEVEMENTS } from '@/lib/storage'
 
 interface QuizContainerProps {
   questions: QuizQuestion[]
   title: string
   icon: string
   gradientColors: string
+  quizMode: 'flags' | 'capitals' | 'population'
   renderQuestion: (question: QuizQuestion, onAnswer: (isCorrect: boolean) => void) => React.ReactNode
 }
 
@@ -18,6 +20,7 @@ export default function QuizContainer({
   title,
   icon,
   gradientColors,
+  quizMode,
   renderQuestion
 }: QuizContainerProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -26,14 +29,29 @@ export default function QuizContainer({
   const [isComplete, setIsComplete] = useState(false)
   const [showFeedback, setShowFeedback] = useState(false)
   const [lastAnswerCorrect, setLastAnswerCorrect] = useState(false)
+  const [currentStreak, setCurrentStreak] = useState(0)
+  const [bestStreak, setBestStreak] = useState(0)
+  const [newAchievements, setNewAchievements] = useState<string[]>([])
 
   const handleAnswer = (isCorrect: boolean) => {
     setLastAnswerCorrect(isCorrect)
     setShowFeedback(true)
     setAnswers([...answers, isCorrect])
 
+    // Haptic feedback
+    if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+      navigator.vibrate(isCorrect ? [50] : [100, 50, 100])
+    }
+
     if (isCorrect) {
       setScore(score + 1)
+      const newStreak = currentStreak + 1
+      setCurrentStreak(newStreak)
+      if (newStreak > bestStreak) {
+        setBestStreak(newStreak)
+      }
+    } else {
+      setCurrentStreak(0)
     }
 
     setTimeout(() => {
@@ -45,6 +63,15 @@ export default function QuizContainer({
       }
     }, 1500)
   }
+
+  // Save stats when quiz is complete
+  useEffect(() => {
+    if (isComplete && score > 0) {
+      const stats = updateGameStats(quizMode, score, questions.length, bestStreak)
+      const recentAchievements = stats.achievements.slice(-3)
+      setNewAchievements(recentAchievements)
+    }
+  }, [isComplete, score, questions.length, bestStreak, quizMode])
 
   const restartQuiz = () => {
     setCurrentQuestion(0)
@@ -93,6 +120,49 @@ export default function QuizContainer({
               {percentage >= 40 && percentage < 60 && "Good effort! Keep practicing! 💪"}
               {percentage < 40 && "Keep learning! Every expert was once a beginner! 🚀"}
             </div>
+
+            {/* Best streak */}
+            {bestStreak >= 3 && (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.3 }}
+                className="mb-4 inline-block px-6 py-3 bg-gradient-to-r from-orange-500 to-red-500 rounded-full"
+              >
+                <span className="text-white font-bold">
+                  🔥 Best Streak: {bestStreak} {bestStreak === 1 ? 'answer' : 'answers'}
+                </span>
+              </motion.div>
+            )}
+
+            {/* Achievements */}
+            {newAchievements.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="mb-6 p-4 glass rounded-2xl"
+              >
+                <div className="text-yellow-400 font-bold mb-2">🎉 New Achievements!</div>
+                <div className="flex flex-wrap gap-2 justify-center">
+                  {newAchievements.map((achId, idx) => {
+                    const ach = ACHIEVEMENTS[achId as keyof typeof ACHIEVEMENTS]
+                    return ach ? (
+                      <motion.div
+                        key={achId}
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.6 + idx * 0.1 }}
+                        className="px-4 py-2 bg-yellow-500/20 rounded-lg text-white text-sm"
+                        title={ach.description}
+                      >
+                        {ach.icon} {ach.name}
+                      </motion.div>
+                    ) : null
+                  })}
+                </div>
+              </motion.div>
+            )}
 
             {/* Answer breakdown */}
             <div className="flex flex-wrap gap-2 justify-center">
@@ -185,7 +255,19 @@ export default function QuizContainer({
         >
           <div className="text-6xl mb-4">{icon}</div>
           <h1 className="text-4xl font-bold text-white mb-2">{title}</h1>
-          <div className="text-xl text-white/80">Score: {score}</div>
+          <div className="flex items-center justify-center gap-4">
+            <div className="text-xl text-white/80">Score: {score}</div>
+            {currentStreak >= 2 && (
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ repeat: Infinity, duration: 1 }}
+                className="px-3 py-1 bg-gradient-to-r from-orange-500 to-red-500 rounded-full text-white font-bold text-sm"
+              >
+                🔥 {currentStreak} Streak!
+              </motion.div>
+            )}
+          </div>
         </motion.div>
 
         {/* Question */}

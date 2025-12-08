@@ -78,6 +78,7 @@ export default function CapitalsQuiz() {
       title="Capital Cities"
       icon="🏛️"
       gradientColors="from-purple-500 to-pink-500"
+      quizMode="capitals"
       renderQuestion={(question, onAnswer) => (
         <div className="glass rounded-3xl p-8">
           <div className="text-center mb-8">

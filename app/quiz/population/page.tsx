@@ -78,6 +78,7 @@ export default function PopulationQuiz() {
       title="Population Quiz"
       icon="👥"
       gradientColors="from-orange-500 to-red-500"
+      quizMode="population"
       renderQuestion={(question, onAnswer) => (
         <div className="glass rounded-3xl p-8">
           <div className="text-center mb-8">

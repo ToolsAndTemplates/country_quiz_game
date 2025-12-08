@@ -1,0 +1,48 @@
+{
+  "name": "Country Quiz Game",
+  "short_name": "CountryQuiz",
+  "description": "Test your geography knowledge with an engaging country quiz game",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#ee7752",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "games"],
+  "shortcuts": [
+    {
+      "name": "Flag Quiz",
+      "short_name": "Flags",
+      "description": "Identify countries by their flags",
+      "url": "/quiz/flags",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Capital Quiz",
+      "short_name": "Capitals",
+      "description": "Match countries with capitals",
+      "url": "/quiz/capitals",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Population Quiz",
+      "short_name": "Population",
+      "description": "Compare countries by population",
+      "url": "/quiz/population",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

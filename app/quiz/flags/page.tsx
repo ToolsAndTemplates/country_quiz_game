@@ -79,6 +79,7 @@ export default function FlagsQuiz() {
       title="Flag Master"
       icon="🚩"
       gradientColors="from-blue-500 to-cyan-500"
+      quizMode="flags"
       renderQuestion={(question, onAnswer) => (
         <div className="glass rounded-3xl p-8">
           <div className="text-center mb-8">

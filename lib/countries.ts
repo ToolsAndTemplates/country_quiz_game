@@ -54,13 +54,26 @@ export function getRandomCountries(countries: Country[], count: number): Country
 
 export async function generateFlagQuestions(numberOfQuestions: number = 10): Promise<QuizQuestion[]> {
   const countries = await fetchCountries()
-  const questions: QuizQuestion[] = []
 
-  const selectedCountries = getRandomCountries(countries, numberOfQuestions)
+  // Prioritize well-known countries for better gameplay
+  const popularCountries = countries.filter(c =>
+    c.population > 5_000_000 || c.name.common.length <= 12
+  )
+
+  const sourceCountries = popularCountries.length >= numberOfQuestions
+    ? popularCountries
+    : countries
+
+  const questions: QuizQuestion[] = []
+  const selectedCountries = getRandomCountries(sourceCountries, numberOfQuestions)
 
   for (const correct of selectedCountries) {
+    // Get wrong options from similar regions for more challenging questions
     const wrongOptions = getRandomCountries(
-      countries.filter(c => c.cca3 !== correct.cca3),
+      countries.filter(c =>
+        c.cca3 !== correct.cca3 &&
+        (c.region === correct.region || Math.random() > 0.5)
+      ),
       3
     )
 

@@ -1,17 +1,32 @@
 # 🌍 Country Quiz Game
 
-An interactive and visually stunning country quiz game built with Next.js 14, featuring multiple quiz modes, smooth animations, and an impressive UI/UX design.
+An interactive and visually stunning country quiz game built with Next.js 14, featuring multiple quiz modes, smooth animations, PWA support, and gamification features.
 
 ## ✨ Features
 
+### Quiz Modes
 - **🚩 Flag Master**: Identify countries by their flags
 - **🏛️ Capital Cities**: Match countries with their capitals
-- **👥 Population Quiz**: Compare countries by population
+- **👥 Population Quiz**: Compare countries by population size
+
+### Engagement Features
+- **🔥 Streak System**: Track consecutive correct answers with live indicators
+- **🏆 Achievements**: Unlock 8 different achievements (Perfect Score, Veteran, Expert, etc.)
+- **📊 Statistics Dashboard**: View your high scores, total games, and best streaks
+- **💾 Local Storage**: All progress saved automatically
+- **📱 Haptic Feedback**: Vibration feedback for correct/incorrect answers
+
+### Progressive Web App
+- **📲 Installable**: Install as a native app on any device
+- **⚡ Offline Support**: Play even without internet connection
+- **🎯 App Shortcuts**: Quick access to all quiz modes
+- **🌐 Service Worker**: Fast loading with intelligent caching
+
+### UI/UX
 - **Stunning Animations**: Powered by Framer Motion
 - **Responsive Design**: Works perfectly on all devices
-- **Real-time Data**: Fetches country information from REST Countries API
-- **Score Tracking**: Track your performance with detailed results
 - **Modern UI**: Glassmorphism effects and gradient backgrounds
+- **Micro-interactions**: Smooth transitions and visual feedback
 
 ## 🚀 Tech Stack
 
@@ -69,9 +84,21 @@ vercel
 
 1. Choose a quiz mode from the homepage
 2. Answer 10 questions per quiz
-3. Get instant feedback on each answer
-4. View your final score and accuracy
-5. Try again or switch to a different mode
+3. Build streaks by getting consecutive correct answers 🔥
+4. Unlock achievements as you play 🏆
+5. View your statistics and high scores 📊
+6. Install as PWA for offline play 📱
+
+## 🏆 Achievements
+
+- **First Steps**: Complete your first quiz
+- **Perfect Score**: Get 100% in a quiz
+- **Veteran**: Complete 10 quizzes
+- **Expert**: Complete 50 quizzes
+- **On Fire**: Get 5 correct answers in a row
+- **Unstoppable**: Get 10 correct answers in a row
+- **Scholar**: Score 8 or more in a quiz
+- **Genius**: Score 9 or more in a quiz
 
 ## 📁 Project Structure
 

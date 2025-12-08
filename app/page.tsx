@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { useState } from 'react'
+import StatsPanel from '@/components/StatsPanel'
 
 export default function Home() {
   const [hoveredMode, setHoveredMode] = useState<string | null>(null)
@@ -99,7 +100,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="flex gap-4 justify-center items-center text-white/80"
+            className="flex gap-4 justify-center items-center text-white/80 mb-6"
           >
             <div className="flex items-center gap-2">
               <span className="text-2xl">⚡</span>
@@ -115,6 +116,14 @@ export default function Home() {
               <span className="text-2xl">🏆</span>
               <span>Challenging</span>
             </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+          >
+            <StatsPanel />
           </motion.div>
         </motion.div>
 
